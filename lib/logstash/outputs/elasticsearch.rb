@@ -321,10 +321,14 @@ class LogStash::Outputs::ElasticSearch < LogStash::Outputs::Base
       type = event["type"] || "logs"
     end
 
-    index = event.sprintf(@index)
-
-    document_id = @document_id ? event.sprintf(@document_id) : nil
-    buffer_receive([event.sprintf(@action), { :_id => document_id, :_index => index, :_type => type }, event.to_hash])
+    begin
+      index = event.sprintf(@index)
+  
+      document_id = @document_id ? event.sprintf(@document_id) : nil
+      buffer_receive([event.sprintf(@action), { :_id => document_id, :_index => index, :_type => type }, event.to_hash])
+    rescue => e
+      @logger.error("can't index event:", :event=> event.to_json, :error => e.to_s)
+    end
   end # def receive
 
   def flush(actions, teardown=false)
