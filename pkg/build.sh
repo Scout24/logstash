@@ -85,7 +85,7 @@ description="logstash is a system for managing and processing events and logs"
 case $os in
   centos|fedora|redhat|sl) 
     fpm -s dir -t rpm -n logstash -v "$RELEASE" \
-      -a noarch --iteration "1_${RPM_REVISION}" \
+      -a noarch --iteration "9.003_bugfix_${RPM_REVISION}" \
       --url "$URL" \
       --description "$DESCRIPTION" \
       -d "jre >= 1.6.0" \
